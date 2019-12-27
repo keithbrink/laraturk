@@ -22,8 +22,8 @@ class MechanicalTurk
     public function __construct()
     {
         // check if AWS root account keys have been configured
-        if (config('laraturk.credentials.AWS_ROOT_ACCESS_KEY_ID') === false or
-             config('laraturk.credentials.AWS_ROOT_SECRET_ACCESS_KEY') === false) {
+        if (config('laraturk.credentials.AWS_ROOT_ACCESS_KEY_ID') === null or
+             config('laraturk.credentials.AWS_ROOT_SECRET_ACCESS_KEY') === null) {
             throw new LaraTurkException('AWS Root account keys must be set as environment variables.');
         }
 
@@ -42,7 +42,11 @@ class MechanicalTurk
      */
     public function setSandboxMode()
     {
-        $region = config('laraturk.defaults.sandbox.region');
+        // check if AWS region has been set
+        if (!$region = config('laraturk.defaults.sandbox.region')) {
+            throw new LaraTurkException('AWS Region must be set in config file.');
+        }
+
         $this->endpoint = 'https://mturk-requester-sandbox.'.$region.'.amazonaws.com';
         $this->defaults = array_merge(config('laraturk.defaults.production'), config('laraturk.defaults.sandbox'));
     }
@@ -54,11 +58,10 @@ class MechanicalTurk
     public function setProductionMode()
     {
         // check if AWS region has been set
-        if (config('laraturk.defaults.production.region') === false) {
+        if (!$region = config('laraturk.defaults.production.region')) {
             throw new LaraTurkException('AWS Region must be set in config file.');
         }
 
-        $region = config('laraturk.defaults.production.region');
         $this->endpoint = 'https://mturk-requester.'.$region.'.amazonaws.com';
         $this->defaults = config('laraturk.defaults.production');
     }
