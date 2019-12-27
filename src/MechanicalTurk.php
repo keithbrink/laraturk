@@ -27,19 +27,12 @@ class MechanicalTurk
             throw new LaraTurkException('AWS Root account keys must be set as environment variables.');
         }
 
-        // check if AWS region has been set
-        if (config('laraturk.credentials.production.region') === false) {
-            throw new LaraTurkException('AWS Region must be set in config file.');
-        }
-
         $this->aws_access_key = config('laraturk.credentials.AWS_ROOT_ACCESS_KEY_ID');
         $this->aws_secret_key = config('laraturk.credentials.AWS_ROOT_SECRET_ACCESS_KEY');
 
         // set endpoint and config defaults to the Production site
-        $region = config('laraturk.defaults.production.region');
-        $this->endpoint = 'https://mturk-requester.'.$region.'.amazonaws.com';
+        $this->setProductionMode();
 
-        $this->defaults = config('laraturk.defaults.production');
         $this->guzzle = new Client();
     }
 
@@ -60,7 +53,13 @@ class MechanicalTurk
      */
     public function setProductionMode()
     {
-        $this->endpoint = 'https://mechanicalturk.amazonaws.com/';
+        // check if AWS region has been set
+        if (config('laraturk.defaults.production.region') === false) {
+            throw new LaraTurkException('AWS Region must be set in config file.');
+        }
+
+        $region = config('laraturk.defaults.production.region');
+        $this->endpoint = 'https://mturk-requester.'.$region.'.amazonaws.com';
         $this->defaults = config('laraturk.defaults.production');
     }
 
