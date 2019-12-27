@@ -27,6 +27,11 @@ class MechanicalTurk
             throw new LaraTurkException('AWS Root account keys must be set as environment variables.');
         }
 
+        // check if AWS region has been set
+        if (config('laraturk.credentials.production.region') === false) {
+            throw new LaraTurkException('AWS Region must be set in config file.');
+        }
+
         $this->aws_access_key = config('laraturk.credentials.AWS_ROOT_ACCESS_KEY_ID');
         $this->aws_secret_key = config('laraturk.credentials.AWS_ROOT_SECRET_ACCESS_KEY');
 
