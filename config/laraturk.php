@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
      |--------------------------------------------------------------------------
      | AWS Root Account Keys
@@ -38,13 +37,14 @@ return [
      |
      */
      'defaults' => [
-
         'sandbox' => [
+               'region' => 'us-east-1',
              // 'HITTypeId' => 'default HITTypeId',
              // 'HITLayoutId' => 'default HITLayoutId',
         ],
 
         'production' => [
+             'region' => 'us-east-1',
              // 'HITTypeId' => 'default HITTypeId',
              // 'Title' => 'Default HIT title',
              // 'Description' => 'Default HIT description',
@@ -66,7 +66,5 @@ return [
              // ],
              // 'RequesterAnnotation' => 'default annotation for the requester',
         ],
-
      ],
-
 ];
